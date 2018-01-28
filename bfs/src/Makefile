@@ -41,7 +41,7 @@ CC = g++
 AOCL_INCLUDE = $(shell aocl compile-config)
 AOCL_LIBS    = $(shell aocl link-config | sed 's/lterasic/laltera/g')
 
-CL_DIR       = /opt/AMDAPPSDK-3.0
+CL_DIR       = /home/yingyi/AMDAPPSDK-3.0
 CL_INCLUDE   = -I$(CL_DIR)/include/
 CL_LIBS      = -L$(CL_DIR)/lib/x86_64/ -lOpenCL
 

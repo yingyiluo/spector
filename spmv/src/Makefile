@@ -39,9 +39,10 @@ TARGET := $(MYOPENCL_HOST_CODE_FILE_NAME)_host
 CC = g++
 
 AOCL_COMPILE_CONFIG = $(shell aocl compile-config)
-AOCL_LINK_CONFIG    = $(shell aocl link-config | sed 's/lterasic/laltera/g')
+AOCL_LINK_CONFIG    = $(shell aocl link-config) -lnalla_pice_mmd
+#AOCL_LINK_CONFIG    = $(shell aocl link-config | sed 's/lterasic/laltera/g')
 
-CL_DIR     = /opt/AMDAPPSDK-3.0
+CL_DIR     = /home/yingyi/AMDAPPSDK-3.0
 CL_INCLUDE = -I$(CL_DIR)/include/
 CL_LIBS    = $(CL_DIR)/lib/x86_64/sdk/libOpenCL.so
 
