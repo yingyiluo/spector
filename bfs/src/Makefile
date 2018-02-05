@@ -39,7 +39,8 @@ TARGET := bfs_host
 CC = g++
 
 AOCL_INCLUDE = $(shell aocl compile-config)
-AOCL_LIBS    = $(shell aocl link-config | sed 's/lterasic/laltera/g')
+AOCL_LIBS    = $(shell aocl link-config)# -lnalla_pice_mmd
+#AOCL_LIBS    = $(shell aocl link-config | sed 's/lterasic/laltera/g')
 
 CL_DIR       = /home/yingyi/AMDAPPSDK-3.0
 CL_INCLUDE   = -I$(CL_DIR)/include/

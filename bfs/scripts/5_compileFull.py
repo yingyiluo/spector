@@ -65,15 +65,15 @@ def launchCommand(path):
 
     pathDelete = os.path.join(path, clBasename)
     #commandDelete = "rm -R -- */ ; find . -size +2M -delete"
-    commandDelete = "rm -R -- */ ; find ! \( -name " + clBasename + ".log -o -name \*.attrib -o -name \*.area -o -name acl_quartus_report.txt -o -name top.fit.summary \) -type f -exec rm {} +"
+    #commandDelete = "rm -R -- */ ; find ! \( -name " + clBasename + ".log -o -name \*.attrib -o -name \*.area -o -name top.fit.summary \) -type f -exec rm {} +"
+
+    commandDelete = "rm -R -- */ ; find ! \( -name \*.attrib -o -name \*.area -o -name top.fit.summary \) -type f -exec rm {} +"
 
     subprocess.call(commandDelete, cwd=pathDelete, shell=True)
 
     outFile = open(outFilename, 'at')
     outFile.write(path + '\n')
     outFile.close()
-
-
 
 
 def main():
@@ -120,10 +120,6 @@ def main():
     else:
         pool = mp.Pool()
     result = pool.map_async(launchCommand, folders).get(31536000) # timeout of 365 days
-
-
-
-
 
 if __name__=="__main__":
     main()

@@ -57,7 +57,7 @@ do
 
 						if [ ! -f ./$folder_rpt_name/quartus_sh_compile.log ]
 						then
-							time aoc --board de5net_a7 $source_file_name
+							time aoc --board p385a_sch_ax115 $source_file_name
 
 							
 							mkdir $folder_rpt_name
