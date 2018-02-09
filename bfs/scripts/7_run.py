@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python
 
 # ----------------------------------------------------------------------
 # Copyright (c) 2016-2017, The Regents of the University of California All

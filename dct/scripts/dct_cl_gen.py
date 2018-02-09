@@ -39,88 +39,69 @@
 # Description: Python script to generate the OpenCL designs.
 # Author: Pingfan Meng
 
-
-
-blockdim_x_pool=[8,16,32,64]
-blockdim_y_pool=[8,16,32,64]
-simd_loc_pool=[1,2,4,8]
-simd_loc_pool2=[2,4,8]
-simd_type_pool=[0,1]
-block_size_f_pool=[1,2,4]
-block_unroll_pool=[0,1]
-
-dct_unroll_pool=[0,1]
-
-simd_wi_pool=[1,2,4,8]
-comp_u_pool=[1,2]
+import numpy as np
 
 base_file_name='dct_base.cl'
+params = np.array(np.genfromtxt('dct_params.csv', delimiter=','))
+num_kernels = params.shape[0]
 
-for blockdim_x in blockdim_x_pool:
-	for blockdim_y in blockdim_y_pool:
-		for simd_type in simd_type_pool:
-			if simd_type==0:
-				for simd_loc in simd_loc_pool:
-					for block_size_f in block_size_f_pool:
-						for block_unroll in block_unroll_pool:
-							for dct_unroll in dct_unroll_pool:
-								for simd_wi in simd_wi_pool:
-									for comp_u in comp_u_pool:
-										if (blockdim_x*blockdim_y<=2094) and (blockdim_y%(block_size_f*8)==0) and (blockdim_x%(block_size_f*8)==0) and (blockdim_x%simd_loc==0) and ((block_unroll==0)or(block_size_f!=1)):
-											input_base_file=open(base_file_name,'r')
-                                							cl_file_name='dct_'+'bx'+str(blockdim_x)+'_'+'by'+str(blockdim_y)+'_'+'simdType'+str(simd_type)+'_'+'simdLoc'+str(simd_loc)+'_'+'blockSizeF'+str(block_size_f)+'_'+'blockU'+str(block_unroll)+'_'+'DCTU'+str(dct_unroll)+'_'+'simdwi'+str(simd_wi)+'_'+'compu'+str(comp_u)+'.cl'
-                                							output_cl_file=open(cl_file_name,'w')
-											kernel_string='#define COMP_U '+str(comp_u)+'\n\n'
-											kernel_string=kernel_string+'#define SIMD_WI '+str(simd_wi)+'\n\n'
-											kernel_string=kernel_string+'#define BLOCK_SIZE_F '+str(block_size_f)+'\n\n'
-											kernel_string=kernel_string+'#define BLOCKDIM_X '+str(blockdim_x)+'\n\n'
-											kernel_string=kernel_string+'#define BLOCKDIM_Y '+str(blockdim_y)+'\n\n'
-											kernel_string=kernel_string+'#define SIMD_TYPE '+str(simd_type)+'\n\n'
-											kernel_string=kernel_string+'#define SIMD_LOC '+str(simd_loc)+'\n\n'
-											kernel_string=kernel_string+'#define BLOCK_UNROLL '+str(block_unroll)+'\n\n'
-											kernel_string=kernel_string+'#define DCT_UNROLL '+str(dct_unroll)+'\n\n'
+for i in range(num_kernels):
+	temp = params[i]
+	blockdim_x = int(temp[0])
+	blockdim_y = int(temp[1])
+	simd_type = int(temp[2])
+	simd_loc = int(temp[3])
+	block_size_f = int(temp[4])
+	block_unroll = int(temp[5])
+	dct_unroll = int(temp[6])
+	simd_wi = int(temp[7])
+	comp_u = int(temp[8])
+	if simd_type==0:
+		if (blockdim_x*blockdim_y<=2094) and (blockdim_y%(block_size_f*8)==0) and (blockdim_x%(block_size_f*8)==0) and (blockdim_x%simd_loc==0) and ((block_unroll==0)or(block_size_f!=1)):
+			input_base_file=open(base_file_name,'r')
+			cl_file_name='dct_'+'bx'+str(blockdim_x)+'_'+'by'+str(blockdim_y)+'_'+'simdType'+str(simd_type)+'_'+'simdLoc'+str(simd_loc)+'_'+'blockSizeF'+str(block_size_f)+'_'+'blockU'+str(block_unroll)+'_'+'DCTU'+str(dct_unroll)+'_'+'simdwi'+str(simd_wi)+'_'+'compu'+str(comp_u)+'.cl'
+			output_cl_file=open(cl_file_name,'w')
+			kernel_string='#define COMP_U '+str(comp_u)+'\n\n'
+			kernel_string=kernel_string+'#define SIMD_WI '+str(simd_wi)+'\n\n'
+			kernel_string=kernel_string+'#define BLOCK_SIZE_F '+str(block_size_f)+'\n\n'
+			kernel_string=kernel_string+'#define BLOCKDIM_X '+str(blockdim_x)+'\n\n'
+			kernel_string=kernel_string+'#define BLOCKDIM_Y '+str(blockdim_y)+'\n\n'
+			kernel_string=kernel_string+'#define SIMD_TYPE '+str(simd_type)+'\n\n'
+			kernel_string=kernel_string+'#define SIMD_LOC '+str(simd_loc)+'\n\n'
+			kernel_string=kernel_string+'#define BLOCK_UNROLL '+str(block_unroll)+'\n\n'
+			kernel_string=kernel_string+'#define DCT_UNROLL '+str(dct_unroll)+'\n\n'
 
-
-											tmp_string=input_base_file.readline()
+			tmp_string=input_base_file.readline()
                                 
-                                							while (tmp_string!=''):
-                                    								kernel_string=kernel_string+tmp_string
-                                    								tmp_string=input_base_file.readline()
+			while (tmp_string!=''):
+				kernel_string=kernel_string+tmp_string
+				tmp_string=input_base_file.readline()
 
-                                							input_base_file.close()
-                                							output_cl_file.write(kernel_string)
-                                							output_cl_file.close()
+			input_base_file.close()
+			output_cl_file.write(kernel_string)
+			output_cl_file.close()
 										
-			else:
-				for simd_loc in simd_loc_pool2:
-					for block_size_f in block_size_f_pool:
-						for block_unroll in block_unroll_pool:
-							for dct_unroll in dct_unroll_pool:
-								for simd_wi in simd_wi_pool:
-									for comp_u in comp_u_pool:
-										if (blockdim_x*blockdim_y<=2094) and (blockdim_y%(block_size_f*8*simd_loc)==0)  and (blockdim_x%(block_size_f*8)==0) and ((block_unroll==0)or(block_size_f!=1)):
-											input_base_file=open(base_file_name,'r')
-                                							cl_file_name='dct_'+'bx'+str(blockdim_x)+'_'+'by'+str(blockdim_y)+'_'+'simdType'+str(simd_type)+'_'+'simdLoc'+str(simd_loc)+'_'+'blockSizeF'+str(block_size_f)+'_'+'blockU'+str(block_unroll)+'_'+'DCTU'+str(dct_unroll)+'_'+'simdwi'+str(simd_wi)+'_'+'compu'+str(comp_u)+'.cl'
-                                							output_cl_file=open(cl_file_name,'w')
-											kernel_string='#define COMP_U '+str(comp_u)+'\n\n'
-											kernel_string=kernel_string+'#define SIMD_WI '+str(simd_wi)+'\n\n'
-											kernel_string=kernel_string+'#define BLOCK_SIZE_F '+str(block_size_f)+'\n\n'
-											kernel_string=kernel_string+'#define BLOCKDIM_X '+str(blockdim_x)+'\n\n'
-											kernel_string=kernel_string+'#define BLOCKDIM_Y '+str(blockdim_y)+'\n\n'
-											kernel_string=kernel_string+'#define SIMD_TYPE '+str(simd_type)+'\n\n'
-											kernel_string=kernel_string+'#define SIMD_LOC '+str(simd_loc)+'\n\n'
-											kernel_string=kernel_string+'#define BLOCK_UNROLL '+str(block_unroll)+'\n\n'
-											kernel_string=kernel_string+'#define DCT_UNROLL '+str(dct_unroll)+'\n\n'
+	else:
+		if (blockdim_x*blockdim_y<=2094) and (blockdim_y%(block_size_f*8*simd_loc)==0)  and (blockdim_x%(block_size_f*8)==0) and ((block_unroll==0)or(block_size_f!=1)):
+			input_base_file=open(base_file_name,'r')
+			cl_file_name='dct_'+'bx'+str(blockdim_x)+'_'+'by'+str(blockdim_y)+'_'+'simdType'+str(simd_type)+'_'+'simdLoc'+str(simd_loc)+'_'+'blockSizeF'+str(block_size_f)+'_'+'blockU'+str(block_unroll)+'_'+'DCTU'+str(dct_unroll)+'_'+'simdwi'+str(simd_wi)+'_'+'compu'+str(comp_u)+'.cl'
+			output_cl_file=open(cl_file_name,'w')
+			kernel_string='#define COMP_U '+str(comp_u)+'\n\n'
+			kernel_string=kernel_string+'#define SIMD_WI '+str(simd_wi)+'\n\n'
+			kernel_string=kernel_string+'#define BLOCK_SIZE_F '+str(block_size_f)+'\n\n'
+			kernel_string=kernel_string+'#define BLOCKDIM_X '+str(blockdim_x)+'\n\n'
+			kernel_string=kernel_string+'#define BLOCKDIM_Y '+str(blockdim_y)+'\n\n'
+			kernel_string=kernel_string+'#define SIMD_TYPE '+str(simd_type)+'\n\n'
+			kernel_string=kernel_string+'#define SIMD_LOC '+str(simd_loc)+'\n\n'
+			kernel_string=kernel_string+'#define BLOCK_UNROLL '+str(block_unroll)+'\n\n'
+			kernel_string=kernel_string+'#define DCT_UNROLL '+str(dct_unroll)+'\n\n'
 
-
-											tmp_string=input_base_file.readline()
+			tmp_string=input_base_file.readline()
                                 
-                                							while (tmp_string!=''):
-                                    								kernel_string=kernel_string+tmp_string
-                                    								tmp_string=input_base_file.readline()
+			while (tmp_string!=''):
+				kernel_string=kernel_string+tmp_string
+				tmp_string=input_base_file.readline()
 
-                                							input_base_file.close()
-                                							output_cl_file.write(kernel_string)
-                                							output_cl_file.close()
-
-			
+			input_base_file.close()
+			output_cl_file.write(kernel_string)
+			output_cl_file.close()

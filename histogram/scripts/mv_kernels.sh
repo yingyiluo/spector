@@ -1,0 +1,27 @@
+#!/bin/bash
+mv ../../benchmarks/hist_design2700 .
+mv ../../benchmarks/hist_design822 . 
+mv ../../benchmarks/hist_design333 .
+mv ../../benchmarks/hist_design516 .
+mv ../../benchmarks/hist_design416 .
+mv ../../benchmarks/hist_design85 .
+mv ../../benchmarks/hist_design918 .
+mv ../../benchmarks/hist_design386 .
+mv ../../benchmarks/hist_design81 .
+mv ../../benchmarks/hist_design558 .
+mv ../../benchmarks/hist_design132 .
+mv ../../benchmarks/hist_design148 .
+mv ../../benchmarks/hist_design164 .
+mv ../../benchmarks/hist_design990 .
+mv ../../benchmarks/hist_design67 .
+mv ../../benchmarks/hist_design396 .
+mv ../../benchmarks/hist_design213 .
+mv ../../benchmarks/hist_design196 .
+mv ../../benchmarks/hist_design391 .
+mv ../../benchmarks/hist_design212 .
+mv ../../benchmarks/hist_design183 .
+mv ../../benchmarks/hist_design364 .
+mv ../../benchmarks/hist_design32 . 
+mv ../../benchmarks/hist_design5 .
+mv ../../benchmarks/hist_design30 .
+mv ../../benchmarks/hist_design4 .

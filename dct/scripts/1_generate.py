@@ -51,7 +51,7 @@ benchmarksFolder = "../benchmarks"
 
 clGenScript = "dct_cl_gen.py"
 compileScripts = ["dct_synthesize" + str(i) + ".sh" for i in range(13)]
-
+paramCSV = "dct_params.csv"
 
 def runScript(script, path):    
     subprocess.call("./" + script, cwd=path, shell=True)
@@ -72,6 +72,11 @@ def main():
     shutil.copy(
             os.path.join(scriptsFolder, clGenScript),
             os.path.join(benchmarksFolder, clGenScript))
+    
+    # Copy cl_gen script
+    shutil.copy(
+            os.path.join(scriptsFolder, paramCSV),
+            os.path.join(benchmarksFolder, paramCSV))
 
     # Copy compile scripts
     for s in compileScripts:        

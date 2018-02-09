@@ -62,15 +62,15 @@ logFilename      = "params.log"               # Log file to copy useful informat
 
 
 KNOB_NUM_HIST  = [i for i in range(1, 17)]
-KNOB_HIST_SIZE = [256, 257]
+KNOB_HIST_SIZE = [257]
 
-KNOB_NUM_WORK_ITEMS  = [1, 2, 4, 8, 16, 32, 64]
-KNOB_NUM_WORK_GROUPS = [1, 2, 4, 8, 16, 32, 64]
+KNOB_NUM_WORK_ITEMS  = [1, 2, 4, 8, 32, 64]
+KNOB_NUM_WORK_GROUPS = [1, 2, 4, 8, 16, 32]
 
 KNOB_SIMD          = [1]
-KNOB_COMPUTE_UNITS = [1, 2, 4, 8]
+KNOB_COMPUTE_UNITS = [1, 2, 4]
 
-KNOB_ACCUM_SMEM    = [0, 1]
+KNOB_ACCUM_SMEM    = [0]
 
 KNOB_UNROLL_FACTOR = [1, 2]
 

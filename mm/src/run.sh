@@ -28,35 +28,25 @@ M=1024
 
 num_design=0
 
-simd_y=1
-subdim_x=1
-for comp_u in 1 2 4
+cat params.csv | while IFS=',' read -r blockdim subdim_x subdim_y simd_x simd_y simd_wi comp_u unroll_sel unroll_f || [ -n "$blockdim" ]
 do
-	for simd_wi in 1 2 4 8
-	do
-		for simd_x in 1 2 4 8
-		do
-			for subdim_y in 1 2 4 8
-			do
-				for blockdim in 2 4 8 16 32
-				do
-					for unroll_f in 2 4 8 16 32
-					do
-						for unroll_sel in 1 2
-						do
-							flag0=$(($M%(($blockdim*$subdim_x)*$simd_x)))
-							flag1=$(($M%(($blockdim*$subdim_y)*$simd_y)))
-							flag2=$(($blockdim%$simd_wi))
+  	#echo $blockdim $subdim_x
+	unroll_sel=$(($unroll_sel+1))
+	if [ $simd_y -eq 1 ] && [$subdim_x -eq 1]
+	then
+		flag0=$(($M%(($blockdim*$subdim_x)*$simd_x)))
+		flag1=$(($M%(($blockdim*$subdim_y)*$simd_y)))
+		flag2=$(($blockdim%$simd_wi))
 
-							if [ $unroll_sel -eq 1 ]
-							then
-								flag3=$(($blockdim%$unroll_f))
-								HOST_CODE_FILE_NAME="mm_b""$blockdim""_subx""$subdim_x""_suby""$subdim_y""_simdx""$simd_x""_simdy""$simd_y""_simdwi""$simd_wi""_compu""$comp_u""_unrollb""$unroll_f"
+		if [ $unroll_sel -eq 1 ]
+		then
+			flag3=$(($blockdim%$unroll_f))
+			HOST_CODE_FILE_NAME="mm_b""$blockdim""_subx""$subdim_x""_suby""$subdim_y""_simdx""$simd_x""_simdy""$simd_y""_simdwi""$simd_wi""_compu""$comp_u""_unrollb""$unroll_f"
 
-							else
-								flag3=$(($subdim_y%$unroll_f))
-								HOST_CODE_FILE_NAME="mm_b""$blockdim""_subx""$subdim_x""_suby""$subdim_y""_simdx""$simd_x""_simdy""$simd_y""_simdwi""$simd_wi""_compu""$comp_u""_unrollp""$unroll_f"
-							fi
+		else
+			flag3=$(($subdim_y%$unroll_f))
+			HOST_CODE_FILE_NAME="mm_b""$blockdim""_subx""$subdim_x""_suby""$subdim_y""_simdx""$simd_x""_simdy""$simd_y""_simdwi""$simd_wi""_compu""$comp_u""_unrollp""$unroll_f"
+		fi
 
 							tmp_par=$(($unroll_f*$subdim_x*$subdim_y*$simd_x*$simd_y*$simd_wi*$comp_u))
 							if [ $tmp_par -gt 256 ]
@@ -107,33 +97,10 @@ do
 									./$host_program_name $device >> run_results.txt
 								fi	
 							fi
-						done
-					done
-				done
-			done
-		done
-	done
-done
+	fi
 
-
-
-
-simd_x=1
-subdim_y=1
-for comp_u in 1 2 4
-do
-	for simd_wi in 1 2 4 8
-	do
-		for simd_y in 1 2 4 8
-		do
-			for subdim_x in 1 2 4 8
-			do
-				for blockdim in 2 4 8 16 32
-				do
-					for unroll_f in 2 4 8 16 32
-					do
-						for unroll_sel in 1 2
-						do
+	if [ $simd_x -eq 1 ] && [$subdim_y -eq 1]
+	then
 							flag0=$(($M%(($blockdim*$subdim_x)*$simd_x)))
 							flag1=$(($M%(($blockdim*$subdim_y)*$simd_y)))
 							flag2=$(($blockdim%$simd_wi))
@@ -196,12 +163,6 @@ do
 									./$host_program_name $device >> run_results.txt
 								fi	
 							fi
-						done
-					done
-				done
-			done
-		done
-	done
+	fi
 done
-
 
