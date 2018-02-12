@@ -65,9 +65,7 @@ def launchCommand(path):
 
     pathDelete = os.path.join(path, clBasename)
     #commandDelete = "rm -R -- */ ; find . -size +2M -delete"
-    #commandDelete = "rm -R -- */ ; find ! \( -name " + clBasename + ".log -o -name \*.attrib -o -name \*.area -o -name top.fit.summary \) -type f -exec rm {} +"
-
-    commandDelete = "rm -R -- */ ; find ! \( -name \*.attrib -o -name \*.area -o -name top.fit.summary \) -type f -exec rm {} +"
+    commandDelete = "rm -R -- */ ; find ! \( -name " + clBasename + ".log -o -name \*.attrib -o -name \*.area -o -name top.fit.summary \) -type f -exec rm {} +"
 
     subprocess.call(commandDelete, cwd=pathDelete, shell=True)
 
