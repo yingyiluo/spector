@@ -89,15 +89,15 @@ def main():
     
     # Run all programs
     print("Running programs...")
-    runScript(os.path.basename(hostRunScript), benchmarksFolder)
+#    runScript(os.path.basename(hostRunScript), benchmarksFolder)
 
 
     # Extract data
     print("Reading results...")
-    copyFile(resultsFilename, benchmarksFolder, scriptsFolder)
+#    copyFile(resultsFilename, benchmarksFolder, scriptsFolder)
     
-    runScript(os.path.basename(logicExtractScript), benchmarksFolder)
-    runScript("parse_results.py " + resultsFilename + " " + outputFilename, ".")
+#    runScript(os.path.basename(logicExtractScript), benchmarksFolder)
+#    runScript("parse_results.py " + resultsFilename + " " + outputFilename, ".")
 
 
 

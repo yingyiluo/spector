@@ -32,6 +32,7 @@ cat params.csv | while IFS=',' read -r blockdim subdim_x subdim_y simd_x simd_y 
 do
   	#echo $blockdim $subdim_x
 	unroll_sel=$(($unroll_sel+1))
+        echo $unroll_sel
 	if [ $simd_y -eq 1 ] && [$subdim_x -eq 1]
 	then
 		flag0=$(($M%(($blockdim*$subdim_x)*$simd_x)))
