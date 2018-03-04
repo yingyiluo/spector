@@ -43,7 +43,7 @@ AOCL_INCLUDE = $(shell aocl compile-config) -I$(ALTERAOCLSDKROOT)/board/nalla_pc
 #AOCL_LIBS    = $(shell aocl link-config | sed 's/lterasic/laltera/g')
 AOCL_LIBS    = $(shell aocl link-config) -lhook -lnalla_pcie_mmd
  
-CL_DIR       = /home/yingyi/AMDAPPSDK-3.0
+CL_DIR       = $(HOME)/AMDAPPSDK-3.0
 CL_INCLUDE   = -I$(CL_DIR)/include/
 CL_LIBS      = -L$(CL_DIR)/lib/x86_64/ -lOpenCL
 
@@ -61,7 +61,7 @@ gpu: cpu
 all: cpu
 
 fpga:
-	$(CXX) $(MYOPENCL_HOST_CODE_FILE_NAME).cpp $(COMMON_SRCS) $(INCLUDE) $(AOCL_INCLUDE) $(AOCL_LIBS) -o $(TARGET) -DFPGA -DVERBOSE=$(VERBOSE_LEVEL)
+	$(CXX) $(MYOPENCL_HOST_CODE_FILE_NAME).cpp $(COMMON_SRCS) $(INCLUDE) $(AOCL_INCLUDE) $(AOCL_LIBS) -o $(TARGET) -DVERBOSE=$(VERBOSE_LEVEL)
 
 
 clean:

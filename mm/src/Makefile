@@ -38,13 +38,13 @@ TARGET := $(MYOPENCL_HOST_CODE_FILE_NAME)_host
 
 CC = g++
 
-AOCL_COMPILE_CONFIG = $(shell aocl compile-config)
-AOCL_LINK_CONFIG    = $(shell aocl link-config) -lhook -lnalla_pice_mmd
+AOCL_COMPILE_CONFIG = $(shell aocl compile-config) -I$(ALTERAOCLSDKROOT)/board/nalla_pcie/software/include
+AOCL_LINK_CONFIG    = $(shell aocl link-config) -lhook -lnalla_pcie_mmd
 #AOCL_LINK_CONFIG    = $(shell aocl link-config | sed 's/lterasic/laltera/g')
 
-CL_DIR     = /home/yingyi/AMDAPPSDK-3.0
+CL_DIR     = $(HOME)/AMDAPPSDK-3.0
 CL_INCLUDE = -I$(CL_DIR)/include/
-CL_LIBS    = $(CL_DIR)/lib/x86_64/sdk/libOpenCL.so
+CL_LIBS    = $(CL_DIR)/lib/x86_64/ -lOpenCL
 
 INCLUDE = -I../..
 

@@ -75,7 +75,7 @@ def copyFile(f, src, dst):
 def main():
     num_runs = 1;
     if len(sys.argv) >= 2:
-        num_runs = int(sys.argv[1])
+        num_runs = sys.argv[1]
 
     print("( Usage: " + sys.argv[0] + " specify the number of runs )\n")
     #print("Copying files...")
