@@ -39,18 +39,22 @@ TARGET := $(MYOPENCL_HOST_CODE_FILE_NAME)_host
 CC = g++
 
 AOCL_COMPILE_CONFIG = $(shell aocl compile-config)
-AOCL_LINK_CONFIG    = $(shell aocl link-config) -lnalla_pice_mmd
+AOCL_LINK_CONFIG    = $(shell aocl link-config) -lhook -lnalla_pice_mmd
 #AOCL_LINK_CONFIG    = $(shell aocl link-config | sed 's/lterasic/laltera/g')
 
 CL_DIR     = /home/yingyi/AMDAPPSDK-3.0
 CL_INCLUDE = -I$(CL_DIR)/include/
 CL_LIBS    = $(CL_DIR)/lib/x86_64/sdk/libOpenCL.so
 
+INCLUDE = -I../..
+
+COMMON_SRCS := $(wildcard ../../common/src/*.cpp)
+
 fpga:
-	$(CC) $(MYOPENCL_HOST_CODE_FILE_NAME).cpp $(AOCL_COMPILE_CONFIG) $(AOCL_LINK_CONFIG) -o $(TARGET) -DVERBOSE=$(VERBOSE_LEVEL)
+	$(CC) $(MYOPENCL_HOST_CODE_FILE_NAME).cpp $(COMMON_SRCS) $(INCLUDE) $(AOCL_COMPILE_CONFIG) $(AOCL_LINK_CONFIG) -o $(TARGET) -DVERBOSE=$(VERBOSE_LEVEL)
 
 cpu:
-	$(CC) $(MYOPENCL_HOST_CODE_FILE_NAME).cpp $(CL_INCLUDE) $(CL_LIBS) -o $(TARGET) -DVERBOSE=$(VERBOSE_LEVEL)
+	$(CC) $(MYOPENCL_HOST_CODE_FILE_NAME).cpp $(INCLUDE) $(CL_INCLUDE) $(CL_LIBS) -o $(TARGET) -DVERBOSE=$(VERBOSE_LEVEL)
 
 gpu: cpu
 

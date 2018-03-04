@@ -62,7 +62,7 @@ for i in range(num_kernels):
     comp_u = int(temp[6])
     unroll_sel = int(temp[7]) + 1
     unroll_f = int(temp[8])
-    print blockdim
+    #print blockdim
     #subdim_x simd_y
     if simd_y == 1 and subdim_x == 1:
         flag1=M%(blockdim*subdim_x*simd_x)
@@ -77,9 +77,9 @@ for i in range(num_kernels):
         flag7=1 if unroll_f*simd_x*simd_y*simd_wi*comp_u>128 else 0  
         flag5=1 if unroll_f*subdim_x*subdim_y*simd_x*simd_y*simd_wi*comp_u>256 else 0
         flag6=1 if blockdim*blockdim*subdim_y*subdim_x*simd_x*simd_y>1024 else 0
-        print '1', flag1, flag2, flag3, flag4, flag5, flag6, flag7                    
+        #print '1', flag1, flag2, flag3, flag4, flag5, flag6, flag7                    
         if flag1==0 and flag2==0 and flag3==0 and flag4==0 and flag5==0 and flag6==0 and flag7==0:
-            print "enter if"
+         #   print "enter if"
             rep_flag=0
             for tmp_setting in param_setting:
                 if tmp_setting==[blockdim, unroll_sel, unroll_f, subdim_x, subdim_y, simd_x, simd_y, simd_wi, comp_u]:
@@ -151,9 +151,8 @@ for i in range(num_kernels):
         flag5=1 if unroll_f*subdim_x*subdim_y*simd_x*simd_y*simd_wi*comp_u>256 else 0
         flag6=1 if blockdim*blockdim*subdim_y*subdim_x*simd_x*simd_y>1024 else 0
                             
-        print '2', flag1, flag2, flag3, flag4, flag5, flag6, flag7                    
+        #print '2', flag1, flag2, flag3, flag4, flag5, flag6, flag7                    
         if flag1==0 and flag2==0 and flag3==0 and flag4==0 and flag5==0 and flag6==0 and flag7==0:
-            print "enter if"
             rep_flag=0
             for tmp_setting in param_setting:
                 if tmp_setting==[blockdim, unroll_sel, unroll_f, subdim_x, subdim_y, simd_x, simd_y, simd_wi, comp_u]:

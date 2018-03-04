@@ -146,8 +146,6 @@ int main(int argc, char *argv[])
 	cl_program program             = clContext.program;
 	cl_kernel mm_kernel            = clContext.kernels[0];
 
-	print_monitor(stdout);
-
 
 
 	//allocate argument arrays for the kernel
@@ -226,9 +224,6 @@ int main(int argc, char *argv[])
 
 
 
-
-	cl_event event;
-
 	//input arrays host -> device
 	error=clEnqueueWriteBuffer (command_queue,
 			A_dev,
@@ -238,13 +233,12 @@ int main(int argc, char *argv[])
 			A,
 			0,
 			NULL,
-			&event);
+			NULL);
 	if (error != CL_SUCCESS)
 	{
 		printf("Write A_dev buffer failed:%d\n",error);
 		return 1;
 	}
-	monitor_and_finish(command_queue, event, stdout);
 
 	error=clEnqueueWriteBuffer (command_queue,
 			B_dev,
@@ -254,13 +248,13 @@ int main(int argc, char *argv[])
 			B,
 			0,
 			NULL,
-			&event);
+			NULL);
 	if (error != CL_SUCCESS)
 	{
 		printf("Write B_dev buffer failed:%d\n",error);
 		return 1;
 	}
-	monitor_and_finish(command_queue, event, stdout);
+
 	GET_TIME_INIT(2);
 	GET_TIME_VAL(0);
 	//execute the kernel
@@ -290,27 +284,24 @@ int main(int argc, char *argv[])
 				NULL,
 				global_work_size,
 				local_work_size,
-				0, NULL, &event);
+				0, NULL, NULL);
 		if (error != CL_SUCCESS) 
 		{
 			printf("Execute task kernel failed:%d\n",error);
 			return 1;
 		}
-		monitor_and_finish(command_queue, event, stdout);
 		clFinish(command_queue);
 	}
 
 	GET_TIME_VAL(1);
 	//results device -> host
 	error = clEnqueueReadBuffer(command_queue, C_dev, CL_TRUE, 0,
-			sizeof(float)*M*M,C, 0, NULL, &event);
+			sizeof(float)*M*M,C, 0, NULL, NULL);
 	if (error != CL_SUCCESS) 
 	{
 		printf("C Device -> host failed:%d\n",error);
 		return 1;
 	}
-
-	monitor_and_finish(command_queue, event, stdout);
 
 	printf("Run-time is:%f ms \n",ELAPSED_TIME_MS(1, 0)/num_runs);
 	printf("\nTotal time: %0.3f ms\n", ELAPSED_TIME_MS(1, 0));

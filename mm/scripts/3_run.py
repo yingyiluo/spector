@@ -71,18 +71,18 @@ def main():
 
     # Generate host files
     print("Generating host files...")
-    runScript(hostGenScript, benchmarksFolder)
+    runScript(hostGenScript + " " + device, benchmarksFolder)
     
     # Run host files
     print("Running programs...")
     runScript(runProgramScript + " " + device, benchmarksFolder)
 
     # Copy results file to current directory
-    shutil.copy(os.path.join(benchmarksFolder, resultsFilename), resultsFilename)
+#    shutil.copy(os.path.join(benchmarksFolder, resultsFilename), resultsFilename)
 
     # Parse results file and output
     print("")
-    runScript("parse_results.py " + resultsFilename + " " + outputFilename, ".")
+#    runScript("parse_results.py " + resultsFilename + " " + outputFilename, ".")
 
 
     print("Done.")

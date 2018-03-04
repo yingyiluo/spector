@@ -34,12 +34,25 @@
 # USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
 # DAMAGE.
 # ----------------------------------------------------------------------
-# Filename: sobel_altera_host_gen.py
+# Filename: mm_altera_host_gen.py
 # Version: 1.0
 # Description: Python script to generate host programs that run the OpenCL designs.
 # Author: Pingfan Meng
 
 import numpy as np
+import sys
+
+device = "fpga"
+
+if len(sys.argv) >= 2:
+    device = sys.argv[1]
+print("Using " + device + " device.")
+print("( Usage: " + sys.argv[0] + " <fpga|gpu|gpu_all|cpu|cpu_all> )\n")
+
+if device == "fpga":
+    base_file_name='mm_base.cpp'
+else:
+    base_file_name='mm_gpu_base.cpp'   
 
 M=1024
 
@@ -91,7 +104,7 @@ for i in range(num_kernels):
                 else:
                     source_file_name='mm_'+'b'+str(blockdim)+'_'+'subx'+str(subdim_x)+'_'+'suby'+str(subdim_y)+'_'+'simdx'+str(simd_x)+'_'+'simdy'+str(simd_y)+'_'+'simdwi'+str(simd_wi)+'_'+'compu'+str(comp_u)+'_'+'unrollp'+str(unroll_f)+'.cpp'
 
-                base_file_name='mm_base.cpp'
+                #base_file_name='mm_base.cpp'
 
                 input_base_file=open(base_file_name,'r')
                 output_source_file=open(source_file_name,'w') 
@@ -115,7 +128,7 @@ for i in range(num_kernels):
 
                     source_string=source_string+'#define print_rsl printf("dse result:\\n %d, %d, %d, %d, %d, %d, %d, %d,  %d, %f\\n",'+ \
                             str(blockdim)+','+ str(subdim_x)+','+str(subdim_y)+','+ str(simd_x)+','+ str(simd_y)+','+ str(simd_wi)+','+str(comp_u)+ \
-                            ','+str(0)+','+str(unroll_f)+', ELAPSED_TIME_MS(1, 0)/100)\n\n'
+                            ','+str(0)+','+str(unroll_f)+', ELAPSED_TIME_MS(1, 0)/NUM_ITER)\n\n'
 
 
                 else:
@@ -127,7 +140,7 @@ for i in range(num_kernels):
 
                     source_string=source_string+'#define print_rsl printf("dse result:\\n %d, %d, %d, %d, %d, %d, %d, %d, %d, %f\\n",'+str(blockdim)+','+ \
                             str(subdim_x)+','+str(subdim_y)+','+ str(simd_x)+','+ str(simd_y)+','+ str(simd_wi)+','+str(comp_u)+','+str(1)+','+str(unroll_f)+ \
-                            ', ELAPSED_TIME_MS(1, 0)/100)\n\n'
+                            ', ELAPSED_TIME_MS(1, 0)/NUM_ITER)\n\n'
 
                 tmp_string=input_base_file.readline()
 
@@ -168,7 +181,7 @@ for i in range(num_kernels):
                 else:
                     source_file_name='mm_'+'b'+str(blockdim)+'_'+'subx'+str(subdim_x)+'_'+'suby'+str(subdim_y)+'_'+'simdx'+str(simd_x)+'_'+'simdy'+str(simd_y)+'_'+'simdwi'+str(simd_wi)+'_'+'compu'+str(comp_u)+'_'+'unrollp'+str(unroll_f)+'.cpp'
 
-                base_file_name='mm_base.cpp'
+                #base_file_name='mm_base.cpp'
 
                 input_base_file=open(base_file_name,'r')
                 output_source_file=open(source_file_name,'w') 
@@ -183,11 +196,11 @@ for i in range(num_kernels):
 
                 if unroll_sel==1:
                     source_string=source_string+'#define CL_FILE_NAME '+'"mm_'+'b'+str(blockdim)+'_'+'subx'+str(subdim_x)+'_'+'suby'+str(subdim_y)+'_'+'simdx'+str(simd_x)+'_'+'simdy'+str(simd_y)+'_'+'simdwi'+str(simd_wi)+'_'+'compu'+str(comp_u)+'_'+'unrollb'+str(unroll_f)+'.aocx"\n\n'
-                    source_string=source_string+'#define print_rsl printf("dse result:\\n %d, %d, %d, %d, %d, %d, %d, %d, %d, %f\\n",'+str(blockdim)+','+ str(subdim_x)+','+str(subdim_y)+','+ str(simd_x)+','+ str(simd_y)+','+ str(simd_wi)+','+str(comp_u)+','+str(0)+','+str(unroll_f)+', ELAPSED_TIME_MS(1, 0)/100)\n\n'
+                    source_string=source_string+'#define print_rsl printf("dse result:\\n %d, %d, %d, %d, %d, %d, %d, %d, %d, %f\\n",'+str(blockdim)+','+ str(subdim_x)+','+str(subdim_y)+','+ str(simd_x)+','+ str(simd_y)+','+ str(simd_wi)+','+str(comp_u)+','+str(0)+','+str(unroll_f)+', ELAPSED_TIME_MS(1, 0)/NUM_ITER)\n\n'
 
                 else:
                     source_string=source_string+'#define CL_FILE_NAME '+'"mm_'+'b'+str(blockdim)+'_'+'subx'+str(subdim_x)+'_'+'suby'+str(subdim_y)+'_'+'simdx'+str(simd_x)+'_'+'simdy'+str(simd_y)+'_'+'simdwi'+str(simd_wi)+'_'+'compu'+str(comp_u)+'_'+'unrollp'+str(unroll_f)+'.aocx"\n\n'
-                    source_string=source_string+'#define print_rsl printf("dse result:\\n %d, %d, %d, %d, %d, %d, %d, %d, %d, %f\\n",'+str(blockdim)+','+ str(subdim_x)+','+str(subdim_y)+','+ str(simd_x)+','+ str(simd_y)+','+ str(simd_wi)+','+str(comp_u)+','+str(1)+','+str(unroll_f)+', ELAPSED_TIME_MS(1, 0)/100)\n\n'
+                    source_string=source_string+'#define print_rsl printf("dse result:\\n %d, %d, %d, %d, %d, %d, %d, %d, %d, %f\\n",'+str(blockdim)+','+ str(subdim_x)+','+str(subdim_y)+','+ str(simd_x)+','+ str(simd_y)+','+ str(simd_wi)+','+str(comp_u)+','+str(1)+','+str(unroll_f)+', ELAPSED_TIME_MS(1, 0)/NUM_ITER)\n\n'
 
 
                 tmp_string=input_base_file.readline()
