@@ -6,6 +6,12 @@ if [ -n "$1" ]
     device=$1
 fi
 
+num_iters=1
+if [ -n "$2" ]
+  then
+    num_iters=$2
+fi
+
 M=1024
 
 num_design=0
@@ -38,7 +44,7 @@ do
 		make $device
 		#run host program
 		#aocl program acl0 $aocx_file_name
-		./$host_program_name $device 1 > "dct_results_""$i".txt
+		./$host_program_name $device $num_iters > "dct_results_""$i".txt
 		i=$(($i+1))
 	fi
 done

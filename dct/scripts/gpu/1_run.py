@@ -82,11 +82,12 @@ def main():
     ''',
     formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument('device', help='cpu or gpu')
+    parser.add_argument('num_runs', help='specify the number of runs')
     #parser.add_argument('-a', '--process-all', help='Process all designs', action='store_true')
     args = parser.parse_args()
 
     device = args.device
-
+    num_runs = args.num_runs
 
 
     print("Copying files...")
@@ -112,7 +113,7 @@ def main():
     
     # Run all programs
     print("Running programs...")
-    runScript(os.path.basename(hostRunScript + " " + device), benchmarksFolder)
+    runScript(os.path.basename(hostRunScript + " " + device + " " + num_runs), benchmarksFolder)
 
 
     # Extract data

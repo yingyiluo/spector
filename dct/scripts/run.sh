@@ -1,7 +1,7 @@
 M=1024
 
 num_design=0
-#num_iters=$1
+num_iters=$1
 #echo "" > run_results.txt
 
 i=1
@@ -30,7 +30,7 @@ do
 		make fpga
 		#run host program
 		aocl program acl0 $aocx_file_name
-		./$host_program_name fpga 1 > "dct_results_""$i".txt
+		./$host_program_name fpga $num_iters > "dct_results_""$i".txt
 		i=$(($i+1))
 	fi
 done

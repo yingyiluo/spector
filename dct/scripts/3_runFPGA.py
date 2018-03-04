@@ -73,8 +73,12 @@ def copyFile(f, src, dst):
 
 
 def main():
+    num_runs = 1;
+    if len(sys.argv) >= 2:
+        num_runs = int(sys.argv[1])
 
-    print("Copying files...")
+    print("( Usage: " + sys.argv[0] + " specify the number of runs )\n")
+    #print("Copying files...")
 
     # Copy scripts
     for s in [hostGenScript, hostRunScript, logicExtractScript]:
@@ -89,7 +93,7 @@ def main():
     
     # Run all programs
     print("Running programs...")
-    runScript(os.path.basename(hostRunScript), benchmarksFolder)
+    runScript(os.path.basename(hostRunScript) + " " + num_runs, benchmarksFolder)
 
 
     # Extract data
