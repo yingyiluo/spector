@@ -28,22 +28,20 @@ M=1024
 
 num_design=0
 
-cat params.csv | while IFS=',' read -r blockdim subdim_x subdim_y simd_x simd_y simd_wi comp_u unroll_sel unroll_f || [ -n "$blockdim" ]
+cat params.csv | while IFS=',' read blockdim subdim_x subdim_y simd_x simd_y simd_wi comp_u unroll_sel unroll_f || [ -n "$blockdim" ]
 do
   	#echo $blockdim $subdim_x
 	unroll_sel=$(($unroll_sel+1))
-        echo $unroll_sel
-	if [ $simd_y -eq 1 ] && [$subdim_x -eq 1]
+        unroll_f=${unroll_f//[ $'\001'-$'\037']}
+	if [ $simd_y -eq 1 ]&&[ $subdim_x -eq 1 ]
 	then
 		flag0=$(($M%(($blockdim*$subdim_x)*$simd_x)))
 		flag1=$(($M%(($blockdim*$subdim_y)*$simd_y)))
 		flag2=$(($blockdim%$simd_wi))
-
 		if [ $unroll_sel -eq 1 ]
 		then
 			flag3=$(($blockdim%$unroll_f))
 			HOST_CODE_FILE_NAME="mm_b""$blockdim""_subx""$subdim_x""_suby""$subdim_y""_simdx""$simd_x""_simdy""$simd_y""_simdwi""$simd_wi""_compu""$comp_u""_unrollb""$unroll_f"
-
 		else
 			flag3=$(($subdim_y%$unroll_f))
 			HOST_CODE_FILE_NAME="mm_b""$blockdim""_subx""$subdim_x""_suby""$subdim_y""_simdx""$simd_x""_simdy""$simd_y""_simdwi""$simd_wi""_compu""$comp_u""_unrollp""$unroll_f"
@@ -58,7 +56,6 @@ do
 								flag4=0
 							fi
 
-
 							tmp_loc=$(($blockdim*$blockdim*$subdim_x*$subdim_y*$simd_x*$simd_y))
 							if [ $tmp_loc -gt 1024 ]
 							then
@@ -70,7 +67,6 @@ do
 
 							if [ $flag0 -eq 0 ]&&[ $flag1 -eq 0 ]&&[ $flag2 -eq 0 ]&&[ $flag3 -eq 0 ]&&[ $flag4 -eq 0 ]&&[ $flag5 -eq 0 ]
 							then
-
 								export MYOPENCL_HOST_CODE_FILE_NAME=$HOST_CODE_FILE_NAME
 
 								aocx_file_name=""
@@ -78,7 +74,6 @@ do
 								aocx_file_name+=".aocx"
 								if [ -f ./$aocx_file_name ] || [ $run_all -eq 1 ]
 								then
-
 
 									host_program_name=""
 									host_program_name+=$HOST_CODE_FILE_NAME
@@ -100,7 +95,7 @@ do
 							fi
 	fi
 
-	if [ $simd_x -eq 1 ] && [$subdim_y -eq 1]
+	if [ $simd_x -eq 1 ]&&[ $subdim_y -eq 1 ]
 	then
 							flag0=$(($M%(($blockdim*$subdim_x)*$simd_x)))
 							flag1=$(($M%(($blockdim*$subdim_y)*$simd_y)))

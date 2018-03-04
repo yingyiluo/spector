@@ -117,10 +117,10 @@ def main():
 
     # Extract data
     print("Reading results...")
-    copyFile(resultsFilename, benchmarksFolder, scriptsFolder)
+    #copyFile(resultsFilename, benchmarksFolder, scriptsFolder)
 
     print("")
-    runScript("parse_results.py " + resultsFilename + " " + outputFilename, ".")
+    #runScript("parse_results.py " + resultsFilename + " " + outputFilename, ".")
 
     print("Done.")
 

@@ -33,28 +33,26 @@
 # DAMAGE.
 # ----------------------------------------------------------------------
 
-
-
 TARGET := $(MYOPENCL_HOST_CODE_FILE_NAME)_host
 
 
 CXX?=g++
 
 
-AOCL_INCLUDE = $(shell aocl compile-config)
+AOCL_INCLUDE = $(shell aocl compile-config) -I$(ALTERAOCLSDKROOT)/board/nalla_pcie/software/include
 #AOCL_LIBS    = $(shell aocl link-config | sed 's/lterasic/laltera/g')
-AOCL_LIBS    = $(shell aocl link-config)
-
+AOCL_LIBS    = $(shell aocl link-config) -lhook -lnalla_pcie_mmd
+ 
 CL_DIR       = /home/yingyi/AMDAPPSDK-3.0
 CL_INCLUDE   = -I$(CL_DIR)/include/
 CL_LIBS      = -L$(CL_DIR)/lib/x86_64/ -lOpenCL
 
 INCLUDE = -I../..
 
+COMMON_SRCS := $(wildcard oclDCT8x8_gold.cpp ../../common/src/*.cpp)
+
 # Targets
 .PHONY: cpu gpu fpga clean all
-
-
 
 cpu:
 	$(CXX) $(MYOPENCL_HOST_CODE_FILE_NAME).cpp oclDCT8x8_gold.cpp $(INCLUDE) $(CL_INCLUDE) $(CL_LIBS) -o $(TARGET)
@@ -63,7 +61,7 @@ gpu: cpu
 all: cpu
 
 fpga:
-	$(CXX) $(MYOPENCL_HOST_CODE_FILE_NAME).cpp oclDCT8x8_gold.cpp $(INCLUDE) $(AOCL_INCLUDE) $(AOCL_LIBS) -o $(TARGET) -DVERBOSE=$(VERBOSE_LEVEL)
+	$(CXX) $(MYOPENCL_HOST_CODE_FILE_NAME).cpp $(COMMON_SRCS) $(INCLUDE) $(AOCL_INCLUDE) $(AOCL_LIBS) -o $(TARGET) -DFPGA -DVERBOSE=$(VERBOSE_LEVEL)
 
 
 clean:

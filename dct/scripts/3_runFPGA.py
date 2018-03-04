@@ -89,7 +89,7 @@ def main():
     
     # Run all programs
     print("Running programs...")
-#    runScript(os.path.basename(hostRunScript), benchmarksFolder)
+    runScript(os.path.basename(hostRunScript), benchmarksFolder)
 
 
     # Extract data

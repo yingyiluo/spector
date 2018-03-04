@@ -104,7 +104,7 @@ int DCT8x8_CL_LAUNCHER(
 	cl_program program             = clContext.program;
 	cl_kernel dct_kernel           = clContext.kernels[0];
 
-        print_monitor(stdout);        
+
 
 
 	//allocate argument arrays for the kernel
@@ -180,7 +180,7 @@ int DCT8x8_CL_LAUNCHER(
 		return 1;
 	}
 
-        cl_event event; 
+
 	//input arrays host -> device
 	error=clEnqueueWriteBuffer (command_queue,
 			src_dev,
@@ -190,14 +190,13 @@ int DCT8x8_CL_LAUNCHER(
 			src,
 			0,
 			NULL,
-			&event);
+			NULL);
 	if (error != CL_SUCCESS)
 	{
 		printf("Write src_dev buffer failed:%d\n",error);
 		return 1;
 	}
-	monitor_and_finish(command_queue, event, stdout);
-	
+
 	GET_TIME_INIT(2);
 	GET_TIME_VAL(0);
 	//execute the kernel
@@ -241,33 +240,32 @@ int DCT8x8_CL_LAUNCHER(
 				NULL,
 				global_work_size,
 				local_work_size,
-				0, NULL, &event);
+				0, NULL, NULL);
 		if (error != CL_SUCCESS) 
 		{
 			printf("Execute task kernel failed:%d\n",error);
 			return 1;
 		}
-       
-		monitor_and_finish(command_queue, event, stdout);
+
 		clFinish(command_queue);
 	}
 
 	GET_TIME_VAL(1);
-        
+
 	//results device -> host
 	error = clEnqueueReadBuffer(command_queue, dst_dev, CL_TRUE, 0,
-			imageH * stride *sizeof(float),dst, 0, NULL, &event);
+			imageH * stride *sizeof(float),dst, 0, NULL, NULL);
 	if (error != CL_SUCCESS) 
 	{
 		printf("dst Device -> host failed:%d\n",error);
 		return 1;
 	}
 
-	monitor_and_finish(command_queue, event, stdout);
+
 
 	printf("Run-time is:%f ms \n",ELAPSED_TIME_MS(1, 0)/num_runs);
 	printf("\nTotal time: %0.3f ms\n", ELAPSED_TIME_MS(1, 0));	
-
+	
 	int NUM_ITER = num_runs; // necessary for the macro expansion
 	print_rsl;
 
@@ -364,7 +362,6 @@ int main(int argc, char ** argv)
 
 
 	//compare the error
-/*
 	FILE * ref_file;
 	FILE * output_file;
 	ref_file=fopen("cpu_ref_output.txt","w");
@@ -396,7 +393,9 @@ int main(int argc, char ** argv)
 
 	fclose(ref_file);
 	fclose(output_file);
-*/
+
+
+
 
 
 	free(h_Input);

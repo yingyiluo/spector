@@ -42,19 +42,6 @@
 
 import numpy as np
 
-blockdim_x_pool=[8,16,32,64]
-blockdim_y_pool=[8,16,32,64]
-simd_loc_pool=[1,2,4,8]
-simd_loc_pool2=[2,4,8]
-simd_type_pool=[0,1]
-block_size_f_pool=[1,2,4]
-block_unroll_pool=[0,1]
-
-dct_unroll_pool=[0,1]
-
-simd_wi_pool=[1,2,4,8]
-comp_u_pool=[1,2]
-
 base_file_name='dct_base.cpp'
 
 param_setting=[]

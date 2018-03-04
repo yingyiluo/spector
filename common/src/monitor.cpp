@@ -2,11 +2,41 @@
 #include <time.h>
 #include <CL/opencl.h>
 #include <aocl_mmd.h>
-#include <unistd.h>
+//#include <unistd.h>
 #include "common/include/monitor.h"
+#ifdef _WIN32 // Windows
+#include <windows.h>
+#else         // Linux
+#include <stdio.h> 
+#include <unistd.h> // readlink, chdir
+#endif
+
 
 extern int aclnalla_pcie0_handle;
 const char *boardname = "aclnalla_pcie0";
+
+// High-resolution timer.
+static double getCurrentTimestamp() {
+#ifdef _WIN32 // Windows
+  // Use the high-resolution performance counter.
+
+  static LARGE_INTEGER ticks_per_second = {};
+  if(ticks_per_second.QuadPart == 0) {
+    // First call - get the frequency.
+    QueryPerformanceFrequency(&ticks_per_second);
+  }
+
+  LARGE_INTEGER counter;
+  QueryPerformanceCounter(&counter);
+
+  double seconds = double(counter.QuadPart) / double(ticks_per_second.QuadPart);
+  return seconds;
+#else         // Linux
+  timespec a;
+  clock_gettime(CLOCK_MONOTONIC, &a);
+  return (double(a.tv_nsec) * 1.0e-9) + double(a.tv_sec);
+#endif
+}
 
 /**
   * The function displays the temperature and power values of the FPGA board 
@@ -16,7 +46,7 @@ const char *boardname = "aclnalla_pcie0";
 int print_monitor(FILE *f) {
 	float temp, power;
 	size_t retsize;
-	double ts = aocl_utils::getCurrentTimestamp();
+	double ts = getCurrentTimestamp();
 	aocl_mmd_get_info(aclnalla_pcie0_handle, AOCL_MMD_TEMPERATURE, sizeof(float), (void *)&temp, &retsize);
 	aocl_mmd_card_info(boardname, AOCL_MMD_POWER, sizeof(float), (void *)&power, &retsize);
 	return fprintf(f, "[%f] temp=%f, power=%f\n", ts, temp, power);
