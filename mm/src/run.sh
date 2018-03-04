@@ -21,8 +21,10 @@ then
 	device="cpu"
 fi
 
+num_iters=$2
+i=0
 
-> run_results.txt
+#> run_results.txt
 
 M=1024
 
@@ -30,7 +32,7 @@ num_design=0
 
 cat params.csv | while IFS=',' read blockdim subdim_x subdim_y simd_x simd_y simd_wi comp_u unroll_sel unroll_f || [ -n "$blockdim" ]
 do
-  	#echo $blockdim $subdim_x
+  	echo $i
 	unroll_sel=$(($unroll_sel+1))
         unroll_f=${unroll_f//[ $'\001'-$'\037']}
 	if [ $simd_y -eq 1 ]&&[ $subdim_x -eq 1 ]
@@ -79,18 +81,18 @@ do
 									host_program_name+=$HOST_CODE_FILE_NAME
 									host_program_name+="_host"
 									num_design=$(($num_design+1))
-									echo "design number:" >> run_results.txt
-									echo $num_design >> run_results.txt
-									echo $host_program_name >> run_results.txt
+									echo "design number:" >> "run_results_""$i".txt
+									echo $num_design >> "run_results_""$i".txt
+									echo $host_program_name >> "run_results_""i".txt
 
 									make $device
 
 									#run host program
 									if [ "$device" == "fpga" ]
 									then
-										aocl program $aocx_file_name
+										aocl program acl0 $aocx_file_name
 									fi
-									./$host_program_name $device >> run_results.txt
+									./$host_program_name $device $num_iters > "run_results_""$i".txt
 								fi	
 							fi
 	fi
@@ -145,20 +147,26 @@ do
 									host_program_name+=$HOST_CODE_FILE_NAME
 									host_program_name+="_host"
 									num_design=$(($num_design+1))
-									echo "design number:" >> run_results.txt
-									echo $num_design >> run_results.txt
-									echo $host_program_name >> run_results.txt
+									echo "design number:" >> "run_results_""$i".txt
+									echo $num_design >> "run_results_""$i".txt
+									echo $host_program_name >> "run_results_""$i".txt
 
 									make $device
 
 									#run host program
 									if [ "$device" == "fpga" ]
 									then
-										aocl program $aocx_file_name
+										aocl program acl0 $aocx_file_name
 									fi
-									./$host_program_name $device >> run_results.txt
+									./$host_program_name $device $num_iters >> "run_results_""$i".txt
 								fi	
 							fi
-	fi
+	fi	
+	i=$(($i+1))
+#	if [ $i -gt 5 ]
+#	then
+#		echo "exit"
+#		exit 0
+#	fi
 done
 

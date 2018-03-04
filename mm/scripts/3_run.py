@@ -63,9 +63,13 @@ def main():
 
     if len(sys.argv) >= 2:
         device = sys.argv[1]
-
+  
+    num_runs = "1";
+    if len(sys.argv) >= 3:
+        num_runs = sys.argv[2]
+   
     print("Using " + device + " device.")
-    print("( Usage: " + sys.argv[0] + " <fpga|gpu|gpu_all|cpu|cpu_all> )\n")
+    print("( Usage: " + sys.argv[0] + " <fpga|gpu|gpu_all|cpu|cpu_all> <num_runs>)\n")
 
     outputFilename = device + "_" + outputResultsFilename
 
@@ -75,7 +79,7 @@ def main():
     
     # Run host files
     print("Running programs...")
-    runScript(runProgramScript + " " + device, benchmarksFolder)
+    runScript(runProgramScript + " " + device + " " + num_runs, benchmarksFolder)
 
     # Copy results file to current directory
 #    shutil.copy(os.path.join(benchmarksFolder, resultsFilename), resultsFilename)

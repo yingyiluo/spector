@@ -24,13 +24,13 @@ do
 		host_program_name+=$HOST_CODE_FILE_NAME
 		host_program_name+="_host"
 		num_design=$(($num_design+1))
-		echo "design number:" > "dct_results_""$i".txt
-		echo $num_design > "dct_results_""$i".txt
-		echo $host_program_name > "dct_results_""$i".txt
+		echo "design number:" > "run_results_""$i".txt
+		echo $num_design > "run_results_""$i".txt
+		echo $host_program_name > "run_results_""$i".txt
 		make fpga
 		#run host program
 		aocl program acl0 $aocx_file_name
-		./$host_program_name fpga $num_iters > "dct_results_""$i".txt
+		./$host_program_name fpga $num_iters > "run_results_""$i".txt
 		i=$(($i+1))
 	fi
 done

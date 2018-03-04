@@ -73,7 +73,7 @@ def copyFile(f, src, dst):
 
 
 def main():
-    num_runs = 1;
+    num_runs = "1";
     if len(sys.argv) >= 2:
         num_runs = sys.argv[1]
 
