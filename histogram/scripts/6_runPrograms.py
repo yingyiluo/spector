@@ -75,8 +75,12 @@ def main():
 
     # Get input file
     progInputFile =  defaultInput
-    #if len(sys.argv) > 1:
-    #    progInputFile = os.path.join("../", sys.argv[1]) # TODO set path correctly
+    if len(sys.argv) > 2:
+        progInputFile = os.path.join("../", sys.argv[1]) # TODO set path correctly
+        num_runs = sys.argv[2]
+    else:
+        print("Usage: ./6_runPrograms <InputFile> <NumRuns>\n")
+        return 
 
     # Get files to not run
     done = []

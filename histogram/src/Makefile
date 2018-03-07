@@ -38,7 +38,8 @@ TARGET := hist256
 
 CC = g++
 
-OBJECTS = $(patsubst %.cpp, %.o, $(wildcard *.cpp))
+fpga: OBJECTS = $(patsubst %.cpp, %.o, histogram.cpp main.cpp)
+gpu: OBJECTS = $(patsubst %.cpp, %.o, histogram_gpu.cpp main.cpp)
 HEADERS = $(wildcard *.h)
 
 
@@ -51,9 +52,12 @@ endif
 
 LIBS = 
 
-INCLUDE = -I.\
-		  -I/usr/include/eigen3
+fpga: INCLUDE = -I.\
+                -I/usr/include/eigen3\
+                -I$(HOME)/spector/common
 
+gpu: INCLUDE = -I.\
+               -I/usr/include/eigen3
 
 
 
@@ -61,7 +65,9 @@ INCLUDE = -I.\
 
 
 fpga: CL_INCLUDE = $(shell aocl compile-config)
-fpga: CL_LIBS    = $(shell aocl link-config | sed 's/lterasic/laltera/g')
+#fpga: CL_LIBS    = $(shell aocl link-config | sed 's/lterasic/laltera/g')
+fpga: CL_LIBS    = $(shell aocl link-config) -lhook -lnalla_pcie_mmd
+
 fpga: $(TARGET)
 
 gpu: CL_INCLUDE = -I/usr/local/cuda/include
@@ -71,7 +77,6 @@ gpu: $(TARGET)
 cpu: gpu
 
 all: fpga
-
 
 %.o: %.cpp $(HEADERS)
 	$(CC) -c $< -o $@ $(CPP_FLAGS) $(INCLUDE) $(CL_INCLUDE)
