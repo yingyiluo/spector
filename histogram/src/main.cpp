@@ -47,6 +47,7 @@
 #include <cstring>
 #include <stdio.h>
 #include <random>
+#include <chrono>
 
 #include "histogram.h"
 #include "params.h"
@@ -369,14 +370,20 @@ int main(int argc, char **argv)
 	double total_time = 0.0;
 
 	// Dry run
+	
+	auto startTime = chrono::high_resolution_clock::now();
+	
 	histogram_cl(clContext, inputData, histogram);
 
 	int n;
+
 	for(n = 0; n < num_runs; n++)
 	{
 		histogram_cl(clContext, inputData, histogram);
 
-		// Get kernel execution times
+		auto endTime = chrono::high_resolution_clock::now();
+		
+			// Get kernel execution times
 
 			for(unsigned int i = 0; i < clContext.events.size(); i++)
 			{
@@ -389,8 +396,8 @@ int main(int argc, char **argv)
 
 				kernel_times[i] += time;
 
-				total_time += time;
 			}
+			total_time = chrono::duration <double, milli> (endTime - startTime).count();
 			if(total_time >= 600*1000)
 			{ 
 				num_runs = n + 1;
