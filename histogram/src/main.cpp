@@ -45,7 +45,7 @@
 #include <fstream>
 #include <ctime>
 #include <cstring>
-
+#include <stdio.h>
 #include <random>
 
 #include "histogram.h"
@@ -400,10 +400,7 @@ int main(int argc, char **argv)
 		cout << "Kernel " << i << ": " << kernel_times[i] << " ms" << endl;
 	}
 
-	total_time /= num_runs;
-
-	cout << "Total: " << total_time << " ms" << endl;
-
+	printf("\nTotal time: %0.3f ms\n", total_time);	
 
 
 	// *********************

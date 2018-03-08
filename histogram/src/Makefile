@@ -38,8 +38,9 @@ TARGET := hist256
 
 CC = g++
 
-fpga: OBJECTS = $(patsubst %.cpp, %.o, histogram.cpp main.cpp)
-gpu: OBJECTS = $(patsubst %.cpp, %.o, histogram_gpu.cpp main.cpp)
+#fpga: OBJECTS = $(patsubst %.cpp, %.o, histogram.cpp main.cpp)
+fpga: CFILES = main.cpp histogram.cpp $(HOME)/spector/common/src/monitor.cpp
+gpu: CFILES = main.cpp histogram_gpu.cpp
 HEADERS = $(wildcard *.h)
 
 
@@ -54,7 +55,7 @@ LIBS =
 
 fpga: INCLUDE = -I.\
                 -I/usr/include/eigen3\
-                -I$(HOME)/spector/common
+                -I$(HOME)/spector
 
 gpu: INCLUDE = -I.\
                -I/usr/include/eigen3
@@ -64,7 +65,7 @@ gpu: INCLUDE = -I.\
 .PHONY: all clean cpu gpu fpga
 
 
-fpga: CL_INCLUDE = $(shell aocl compile-config)
+fpga: CL_INCLUDE = $(shell aocl compile-config) -I$(ALTERAOCLSDKROOT)/board/nalla_pcie/software/include
 #fpga: CL_LIBS    = $(shell aocl link-config | sed 's/lterasic/laltera/g')
 fpga: CL_LIBS    = $(shell aocl link-config) -lhook -lnalla_pcie_mmd
 
@@ -78,11 +79,13 @@ cpu: gpu
 
 all: fpga
 
-%.o: %.cpp $(HEADERS)
+#%.o: %.cpp $(HEADERS)
 	$(CC) -c $< -o $@ $(CPP_FLAGS) $(INCLUDE) $(CL_INCLUDE)
 
-$(TARGET): $(OBJECTS)
-	$(CC) $(CPP_FLAGS) $(OBJECTS) -Wall $(LIBS) $(CL_LIBS) -o $@
+#$(TARGET): $(OBJECTS)
+#	$(CC) $(CPP_FLAGS) $(OBJECTS) -Wall $(LIBS) $(CL_LIBS) -o $@
+$(TARGET):
+	$(CC) $(CPP_FLAGS) $(CFILES) $(LIBS) $(CL_LIBS) -o $@
 
 
 clean:
