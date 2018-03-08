@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/python
 
 # ----------------------------------------------------------------------
 # Copyright (c) 2016, The Regents of the University of California All
@@ -44,7 +44,7 @@ import os
 import subprocess
 import re
 import sys
-
+import time
 
 outfilename       = "fpga_results.csv" # Output filename for results
 
@@ -150,10 +150,11 @@ def main():
 
                     fit = 'Y'
 
+                    subprocess.call("make clean", cwd=d, shell=True)
                     subprocess.call("make fpga > /dev/null 2>&1", cwd=d, shell=True)
 
                     print("Running " + d)
-                    output = subprocess.check_output("./" + exeFilename + " " + progInputFile + " fpga " + str(num_runs), cwd=d, shell=True, stderr=subprocess.STDOUT) #, timeout=5)
+                    output = subprocess.check_output("./" + exeFilename + " " + progInputFile + " fpga " + str(num_runs) + " > run_results.txt", cwd=d, shell=True, stderr=subprocess.STDOUT) #, timeout=5)
 
 
                     for line in output.split(b'\n'):
@@ -178,9 +179,10 @@ def main():
             except:
                 continue
 
+            time.sleep(100)
             break
 
-
+            
 
         # Read area info
         #
