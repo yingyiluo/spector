@@ -188,8 +188,8 @@ bool histogram_cl(
 	// ---------------
 	// Display time
 	// ---------------
-	auto totalTime = chrono::duration <double, milli> (endTime - startTime).count();
-	cout << "Total time: " << totalTime << " ms" << endl;
+	//auto totalTime = chrono::duration <double, milli> (endTime - startTime).count();
+	//cout << "Total time: " << totalTime << " ms" << endl;
 
 
 	

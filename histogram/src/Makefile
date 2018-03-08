@@ -80,12 +80,12 @@ cpu: gpu
 all: fpga
 
 #%.o: %.cpp $(HEADERS)
-	$(CC) -c $< -o $@ $(CPP_FLAGS) $(INCLUDE) $(CL_INCLUDE)
+#	$(CC) -c $< -o $@ $(CPP_FLAGS) $(INCLUDE) $(CL_INCLUDE)
 
 #$(TARGET): $(OBJECTS)
 #	$(CC) $(CPP_FLAGS) $(OBJECTS) -Wall $(LIBS) $(CL_LIBS) -o $@
 $(TARGET):
-	$(CC) $(CPP_FLAGS) $(CFILES) $(LIBS) $(CL_LIBS) -o $@
+	$(CC) $(CPP_FLAGS) $(CFILES) $(CL_INCLUDE) $(INCLUDE) $(LIBS) $(CL_LIBS) -o $@
 
 
 clean:

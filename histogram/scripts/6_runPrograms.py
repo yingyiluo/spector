@@ -44,7 +44,7 @@ import os
 import subprocess
 import re
 import sys
-import time
+import time as t
 
 outfilename       = "fpga_results.csv" # Output filename for results
 
@@ -75,11 +75,11 @@ def main():
 
     # Get input file
     progInputFile =  defaultInput
-    if len(sys.argv) > 2:
-        progInputFile = os.path.join("../", sys.argv[1]) # TODO set path correctly
-        num_runs = sys.argv[2]
+    if len(sys.argv) > 1:
+       # progInputFile = os.path.join("../", sys.argv[1]) # TODO set path correctly
+        num_runs = sys.argv[1]
     else:
-        print("Usage: ./6_runPrograms <InputFile> <NumRuns>\n")
+        print("Usage: ./6_runPrograms <NumRuns>\n")
         return 
 
     # Get files to not run
@@ -179,7 +179,7 @@ def main():
             except:
                 continue
 
-            time.sleep(100)
+            t.sleep(120)
             break
 
             

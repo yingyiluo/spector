@@ -371,12 +371,13 @@ int main(int argc, char **argv)
 	// Dry run
 	histogram_cl(clContext, inputData, histogram);
 
-	for(int n = 0; n < num_runs; n++)
+	int n;
+	for(n = 0; n < num_runs; n++)
 	{
 		histogram_cl(clContext, inputData, histogram);
 
 		// Get kernel execution times
-		{	
+
 			for(unsigned int i = 0; i < clContext.events.size(); i++)
 			{
 				if(i == 1 && (TOTAL_WORK_ITEMS == 1 || KNOB_ACCUM_SMEM == 1)){ break; }
@@ -390,8 +391,12 @@ int main(int argc, char **argv)
 
 				total_time += time;
 			}
+			if(total_time >= 600*1000)
+			{ 
+				num_runs = n + 1;
+				break;
+			}
 
-		}
 	}
 
 	for(int i = 0; i < clContext.events.size(); i++)
@@ -406,7 +411,7 @@ int main(int argc, char **argv)
 	// *********************
 	//   Verify result
 	// *********************
-
+/*
 	vector<unsigned> histogram2;
 	histogram_cpu(inputData, histogram2);
 
@@ -450,7 +455,7 @@ int main(int argc, char **argv)
 		cout << "Verification: SUCCESS" << endl;
 	}
 
-
+*/
 
 
 	// *********************
