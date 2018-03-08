@@ -42,7 +42,7 @@
 
 import os.path
 import shutil
-
+from distutils.dir_util import copy_tree
 
 ##############
 # README
@@ -92,7 +92,7 @@ def createFolders(
         strValues = [' ' if v==FULL_UNROLL else str(v) for v in values]
 
         copiedDir = os.path.join(outRootPath, outBasename) + str(num)
-        shutil.copytree(dirToCopy, copiedDir, True)
+        copy_tree(dirToCopy, copiedDir)
 
         outKernelPath = os.path.join(copiedDir, outKernelSubfolder, os.path.basename(kernelFilename))
         outKnobPath   = os.path.join(copiedDir, outKnobFilename)
