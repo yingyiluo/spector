@@ -515,7 +515,7 @@ int main(int argc, char ** argv)
 	}
 	cout << "Average kernel total run time: " << k_total_time << " ms" << endl;
 
-	printf("\nTotal time: %0.3f ms\n", totalTime + DryRunTime);
+	printf("\nTotal time: %0.3f ms\n", totalTime + dryRunTime);
 
 
 	// Copy result from device to host
@@ -524,7 +524,7 @@ int main(int argc, char ** argv)
 	ExitError(checkErr(err, "Failed to read data from the device!"));
 
 
-
+/*
 	// Verification step
 	//
 	for(int i = 0; i < no_of_nodes; i++)
@@ -542,7 +542,7 @@ int main(int argc, char ** argv)
 
 	cout << "Verification: " << (passed? "Passed": "Failed") << endl;
 
-
+*/
 
 
 	// Store the result into a file

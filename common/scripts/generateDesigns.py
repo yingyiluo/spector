@@ -92,6 +92,8 @@ def createFolders(
         strValues = [' ' if v==FULL_UNROLL else str(v) for v in values]
 
         copiedDir = os.path.join(outRootPath, outBasename) + str(num)
+        if os.path.isdir(copiedDir) is False:
+            continue
         copy_tree(dirToCopy, copiedDir)
 
         outKernelPath = os.path.join(copiedDir, outKernelSubfolder, os.path.basename(kernelFilename))

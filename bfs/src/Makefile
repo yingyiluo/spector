@@ -60,7 +60,7 @@ gpu: cpu
 all: cpu
 
 fpga:
-	$(CC) my_bfs.cpp $(CFLAGS) $(INCLUDE) $(AOCL_INCLUDE) $(AOCL_LIBS) -o $(TARGET)
+	$(CC) my_bfs.cpp $(HOME)/spector/common/src/monitor.cpp $(CFLAGS) $(INCLUDE) $(AOCL_INCLUDE) $(AOCL_LIBS) -o $(TARGET)
 
 clean:
 	rm -rf $(TARGET)

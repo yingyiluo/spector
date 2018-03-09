@@ -61,7 +61,7 @@ kernel_filenames  = ["bfs_fpga/kernel1.attrib", "bfs_fpga/kernel2.attrib"] # Ker
 clBasename        = "bfs_fpga" # Basename for the OpenCL file
 exeFilename       = "bfs_host" # Program filename
 
-defaultInput      = "../graphs/large_0.01.txt" # Default input file
+defaultInput      = "../../graphs/large_0.01.txt" # Default input file
 
 verif_re = re.compile(r'Verification: (\S+)')  # Regex for verification
 verif_text =                          "Passed" # Verification text to check for success
@@ -153,7 +153,7 @@ def main():
                     subprocess.call("make fpga > /dev/null 2>&1", cwd=d, shell=True)
 
                     print("Running " + d)
-                    output = subprocess.check_output("./" + exeFilename + " " + progInputFile + " fpga " + str(num_runs), cwd=d, shell=True, stderr=subprocess.STDOUT) #, timeout=5)
+                    output = subprocess.check_output("./" + exeFilename + " " + progInputFile + " fpga " + str(num_runs) + " > run_results.tx", cwd=d, shell=True, stderr=subprocess.STDOUT) #, timeout=5)
 
 
                     for line in output.split(b'\n'):

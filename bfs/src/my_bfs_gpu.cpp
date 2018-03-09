@@ -505,7 +505,7 @@ int main(int argc, char ** argv)
 	}
 	cout << "Average kernel total run time: " << k_total_time << " ms" << endl;
 
-	printf("\nTotal time: %0.3f ms\n", totalTime + DryRunTime);
+	printf("\nTotal time: %0.3f ms\n", totalTime + dryRunTime);
 
 
 	// Copy result from device to host
