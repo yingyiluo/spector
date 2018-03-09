@@ -231,7 +231,7 @@ int DCT8x8_CL_LAUNCHER(
 
 #endif
 
-
+	double total_time = 0.0;
 	for (int iter=0; iter<num_runs; iter++)
 	{
 
@@ -250,9 +250,15 @@ int DCT8x8_CL_LAUNCHER(
        
 		monitor_and_finish(command_queue, event, stdout);
 		clFinish(command_queue);
+		GET_TIME_VAL(1);
+		total_time = ELAPSED_TIME_MS(1, 0);
+		if (total_time >= 600*1000) {
+			num_runs = iter + 1;
+			break;
+		} 
 	}
 
-	GET_TIME_VAL(1);
+//	GET_TIME_VAL(1);
         
 	//results device -> host
 	error = clEnqueueReadBuffer(command_queue, dst_dev, CL_TRUE, 0,
@@ -263,10 +269,10 @@ int DCT8x8_CL_LAUNCHER(
 		return 1;
 	}
 
-	monitor_and_finish(command_queue, event, stdout);
+//	monitor_and_finish(command_queue, event, stdout);
 
-	printf("Run-time is:%f ms \n",ELAPSED_TIME_MS(1, 0)/num_runs);
-	printf("\nTotal time: %0.3f ms\n", ELAPSED_TIME_MS(1, 0));	
+	printf("Kernel Run-time is:%f ms \n",total_time/num_runs);
+	printf("\nTotal time: %0.3f ms\n", total_time);	
 
 	int NUM_ITER = num_runs; // necessary for the macro expansion
 	print_rsl;
