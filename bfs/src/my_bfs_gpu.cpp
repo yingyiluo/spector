@@ -224,7 +224,7 @@ int main(int argc, char ** argv)
 
 	if(!init_opencl(&clContext, kernel_names, device_type, cl_filename, aocx_filename)){ exit(EXIT_FAILURE); }
 
-	print_monitor(stdout);
+
 
 
 	int num_runs = 1;
@@ -369,8 +369,7 @@ int main(int argc, char ** argv)
 	cl_ulong k_time_start, k_time_end;
 	double k_temp, k_total_time = 0.0;
 
-	auto startInterval = chrono::high_resolution_clock::now();
-	auto endInterval = chrono::high_resolution_clock::now();
+	auto startTime = chrono::high_resolution_clock::now();
 	// Run the algorithm multiple times
 	//
 	for(int irun = 0; irun < num_runs+1; irun++)
@@ -380,7 +379,7 @@ int main(int argc, char ** argv)
 
 		k = 0;
 		int stop;
-		cl_event event;
+
 
 
 		// Copy data to device memory
@@ -435,12 +434,6 @@ int main(int argc, char ** argv)
 			cl_int err = clEnqueueNDRangeKernel(
 					command_queue, kernel[0], 1, NULL,
 					workSize_1, localWorkSize_1, 0, NULL, &clContext.events[0]);
-			endInterval = chrono::high_resolution_clock::now();
-			if (chrono::duration <double, milli> (endInterval - startInterval).count() >= 1000)
-			{
-				monitor_and_finish(command_queue, clContext.events[0], stdout);
-				startInterval = endInterval;
-			}
 			clFinish(command_queue);
 			
 			ExitError(checkErr(err, "Failed to execute kernel1!"));
@@ -448,7 +441,6 @@ int main(int argc, char ** argv)
 			
 			err = clEnqueueNDRangeKernel(command_queue, kernel[1], 1, NULL,
 					workSize_2, localWorkSize_2, 0, NULL, &clContext.events[1]);
-			//monitor_and_finish(command_queue, clContext.events[1], stdout);
 			clFinish(command_queue);
 			
 			ExitError(checkErr(err, "Failed to execute kernel2!"));
@@ -470,10 +462,8 @@ int main(int argc, char ** argv)
 
 
 			// Copy stop from device
-
-			clEnqueueReadBuffer(command_queue, d_over, CL_TRUE, 0, sizeof(int), (void*)&stop, 0, NULL, &event);
+			clEnqueueReadBuffer(command_queue, d_over, CL_TRUE, 0, sizeof(int), (void*)&stop, 0, NULL, NULL);
 			ExitError(checkErr(err, "Failed to read data from the device!"));
-			//monitor_and_finish(command_queue, event, stdout);
 			
 			k++;
 

@@ -60,7 +60,8 @@ def main():
     formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument('device', help='cpu or gpu')
     parser.add_argument('-i', '--input', help='Path to the input file to use: ', default='../graphs/large_0.01.txt')
-    parser.add_argument('-a', '--process-all', help='Process all designs', action='store_true')
+    parser.add_argument('-a', '--process-all', help='Process all designs', default='True', action='store_true')
+    parser.add_argument('-n', '--num-runs', help='Number of iterations to run')
     args = parser.parse_args()
 
 
@@ -72,6 +73,7 @@ def main():
    
     device = args.device
 
+    num_runs = args.num_runs    
 
     clBasename  = "bfs_fpga" # Basename for the OpenCL file
     exeFilename = "bfs_host" # Program filename
@@ -85,6 +87,7 @@ def main():
             paramsfilename   = paramsfilename,
             compiledfilename = paramsfilename,
             process_all = process_all,
+            num_runs = num_runs,
             device = device)
 
 

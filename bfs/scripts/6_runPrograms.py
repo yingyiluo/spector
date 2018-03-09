@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/python
 
 # ----------------------------------------------------------------------
 # Copyright (c) 2016, The Regents of the University of California All
@@ -44,7 +44,7 @@ import os
 import subprocess
 import re
 import sys
-
+import time as t
 
 outfilename       = "fpga_results.csv" # Output filename for results
 
@@ -68,7 +68,7 @@ verif_text =                          "Passed" # Verification text to check for 
 time_re  = re.compile(r'Total time: (\S+) ms') # Regex for running time
 
 
-num_runs = 5 # Number of times to run the algorithm
+num_runs = 1 # Number of times to run the algorithm
 
 
 def main():
@@ -77,6 +77,9 @@ def main():
     progInputFile =  defaultInput
     if len(sys.argv) > 1:
         progInputFile = os.path.join("../", sys.argv[1]) # TODO set path correctly
+
+    if len(sys.argv) > 2:
+        num_runs = int(sys.argv[2])
 
     # Get files to not run
     done = []
@@ -145,7 +148,8 @@ def main():
                 if os.path.isfile(os.path.join(d, clBasename + ".aocx")):
 
                     fit = 'Y'
-
+                  
+                    subprocess.call("make clean > /dev/null 2>&1", cwd=d, shell=True)
                     subprocess.call("make fpga > /dev/null 2>&1", cwd=d, shell=True)
 
                     print("Running " + d)
@@ -173,7 +177,8 @@ def main():
                 continue
             except:
                 continue
-
+ 
+            t.sleep(120)
             break
 
 
