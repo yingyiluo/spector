@@ -29,7 +29,7 @@ do
 		echo $host_program_name > "run_results_""$i".txt
 		make fpga
 		#run host program
-		aocl program acl0 $aocx_file_name
+#		aocl program acl0 $aocx_file_name
 		./$host_program_name fpga $num_iters > "run_results_""$i".txt
 		i=$(($i+1))
 	fi

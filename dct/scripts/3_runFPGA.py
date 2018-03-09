@@ -51,6 +51,7 @@ benchmarksFolder = "../benchmarks"
 
 hostGenScript = "dct_host_gen_FPGA.py"
 hostRunScript = "run.sh"
+paramsConfigScript = "dct_params.csv"
 logicExtractScript  = "logic_util_extract.py"
 resultsFilename       = "run_results.txt"
 outputResultsFilename = "results.csv"
@@ -81,7 +82,7 @@ def main():
     #print("Copying files...")
 
     # Copy scripts
-    for s in [hostGenScript, hostRunScript, logicExtractScript]:
+    for s in [hostGenScript, hostRunScript, logicExtractScript, paramsConfigScript]:
         copyFile(s, scriptsFolder, benchmarksFolder)
 
     outputFilename = "fpga_" + outputResultsFilename
