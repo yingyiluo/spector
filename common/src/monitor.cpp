@@ -76,7 +76,7 @@ cl_int monitor_and_finish(cl_command_queue queue, cl_event event, FILE *f) {
 			sleep_ret = clock_nanosleep(CLOCK_REALTIME, TIMER_ABSTIME, &tick, NULL);
 		}
 	}
-	print_monitor(f);
+//	print_monitor(f);
 	return CL_SUCCESS;
 }
 
