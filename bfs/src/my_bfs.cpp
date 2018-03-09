@@ -439,7 +439,7 @@ int main(int argc, char ** argv)
 			if (chrono::duration <double, milli> (endInterval - startInterval).count() >= 1000)
 			{
 				monitor_and_finish(command_queue, clContext.events[0], stdout);
-				startInterval = endInterval;
+				startInterval = chrono::high_resolution_clock::now();
 			}
 			clFinish(command_queue);
 			
@@ -491,8 +491,8 @@ int main(int argc, char ** argv)
 			dryRunTime = chrono::duration <double, milli> (sub_endTime - sub_startTime).count();
 		}
 
-		cout << "*";
-		cout << flush;
+//		cout << "*";
+//		cout << flush;
 		if( totalTime + dryRunTime >= 600*1000)
 		{
 			num_runs = irun + 1;

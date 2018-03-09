@@ -153,7 +153,7 @@ def main():
                     subprocess.call("make fpga > /dev/null 2>&1", cwd=d, shell=True)
 
                     print("Running " + d)
-                    output = subprocess.check_output("./" + exeFilename + " " + progInputFile + " fpga " + str(num_runs) + " > run_results.tx", cwd=d, shell=True, stderr=subprocess.STDOUT) #, timeout=5)
+                    output = subprocess.check_output("./" + exeFilename + " " + progInputFile + " fpga " + str(num_runs) + " > run_results.txt", cwd=d, shell=True, stderr=subprocess.STDOUT) #, timeout=5)
 
 
                     for line in output.split(b'\n'):
