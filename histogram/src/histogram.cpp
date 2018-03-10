@@ -74,7 +74,8 @@ void histogram_cpu(const std::vector<data_t>& data, std::vector<unsigned>& histo
 bool histogram_cl(
 		ClContext& context,
 		const std::vector<data_t>& data,
-		std::vector<unsigned>& histogram)
+		std::vector<unsigned>& histogram,
+		int recordFlag)
 // --------------------------------------------
 {
 	cl_int err;
@@ -89,7 +90,7 @@ bool histogram_cl(
 		clReleaseEvent(context.events[i]);
 	}
 	
-	print_monitor(stdout);
+	//print_monitor(stdout);
 
 	histogram.clear();
 	histogram.resize(256, 0);
@@ -110,15 +111,15 @@ bool histogram_cl(
 
 	err = clEnqueueWriteBuffer(context.queues[0], data_d, CL_FALSE, 0, data.size() * sizeof(data_t), data.data(), 0, NULL, &event);
 	ReturnError(checkErr(err, "Failed to copy structure to device!"));
-	monitor_and_finish(context.queues[0], event, stdout);
+	//monitor_and_finish(context.queues[0], event, stdout);
 
 	err = clEnqueueWriteBuffer(context.queues[0], hist_d, CL_FALSE, 0, histogram.size() * sizeof(unsigned), histogram.data(), 0, NULL, &event);
 	ReturnError(checkErr(err, "Failed to copy structure to device!"));
-	monitor_and_finish(context.queues[0], event, stdout);
+	//monitor_and_finish(context.queues[0], event, stdout);
 
 	err = clEnqueueWriteBuffer(context.queues[0], histtemp_d, CL_FALSE, 0, histogramTemp.size() * sizeof(unsigned), histogramTemp.data(), 0, NULL, &event);
 	ReturnError(checkErr(err, "Failed to copy structure to device!"));
-	monitor_and_finish(context.queues[0], event, stdout);
+	//monitor_and_finish(context.queues[0], event, stdout);
 
 
 	int numData = data.size() / TOTAL_WORK_ITEMS;
@@ -150,7 +151,8 @@ bool histogram_cl(
 	err = clEnqueueNDRangeKernel(context.queues[0], kernel_hist, 1, NULL, &global_work, &local_work, 0, NULL, &context.events[0]);
 
 	ReturnError(checkErr(err, "Failed to execute kernel!"));
-	monitor_and_finish(context.queues[0], context.events[0], stdout);
+	if(recordFlag == 1)
+		monitor_and_finish(context.queues[0], context.events[0], stdout);
 
 	clFinish(context.queues[0]);
 
@@ -167,7 +169,7 @@ bool histogram_cl(
 	err = clEnqueueNDRangeKernel(context.queues[1], kernel_accum, 1, NULL, &global_work, &local_work, 0, NULL, &context.events[1]);
 
 	ReturnError(checkErr(err, "Failed to execute kernel!"));
-	monitor_and_finish(context.queues[1], context.events[1], stdout);
+	//monitor_and_finish(context.queues[1], context.events[1], stdout);
 	clFinish(context.queues[1]);
 
 #endif
@@ -183,7 +185,7 @@ bool histogram_cl(
 
 	err = clEnqueueReadBuffer(context.queues[0], hist_d, CL_TRUE, 0, histogram.size() * sizeof(unsigned), histogram.data(), 0, NULL, &event);
 	ReturnError(checkErr(err, "Failed to read output array!"));
-	monitor_and_finish(context.queues[0], event, stdout);
+	//monitor_and_finish(context.queues[0], event, stdout);
 
 	// ---------------
 	// Display time

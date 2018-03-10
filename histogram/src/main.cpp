@@ -357,7 +357,7 @@ int main(int argc, char **argv)
 	// *********************
 	// TODO Input size as parameter
 	vector<data_t> inputData;
-	generateInputData(inputData, pow(2, 20)); // ~1,000,000 values
+	generateInputData(inputData, pow(2, 23)); // ~1,000,000 values
 
 	vector<unsigned int> histogram;
 
@@ -373,13 +373,21 @@ int main(int argc, char **argv)
 	
 	auto startTime = chrono::high_resolution_clock::now();
 	
-	histogram_cl(clContext, inputData, histogram);
+	histogram_cl(clContext, inputData, histogram, 1);
 
 	int n;
-
+ 	auto startInterval = chrono::high_resolution_clock::now();
+	auto endInterval = chrono::high_resolution_clock::now();
 	for(n = 0; n < num_runs; n++)
 	{
-		histogram_cl(clContext, inputData, histogram);
+		int ifRecord = 0;
+		endInterval = chrono::high_resolution_clock::now();
+		if(chrono::duration <double, milli> (endInterval - startInterval).count() >= 1000)
+		{
+			ifRecord = 1;
+			startInterval = chrono::high_resolution_clock::now();
+		}
+		histogram_cl(clContext, inputData, histogram, ifRecord);
 
 		auto endTime = chrono::high_resolution_clock::now();
 		

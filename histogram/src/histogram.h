@@ -105,7 +105,7 @@ inline bool checkErr_(cl_int err, const char * name, int line = -1, const char* 
 void histogram_cpu(const std::vector<data_t>& data, std::vector<unsigned>& histogram);
 
 /// Run histogram calculation on a device using OpenCL.
-bool histogram_cl(ClContext& context, const std::vector<data_t>& data, std::vector<unsigned>& histogram);
+bool histogram_cl(ClContext& context, const std::vector<data_t>& data, std::vector<unsigned>& histogram, int recordFlag);
 
 
 #endif /* HISTOGRAM_H_ */
