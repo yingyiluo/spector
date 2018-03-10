@@ -49,19 +49,21 @@ CL_LIBS      = -L$(CL_DIR)/lib/x86_64/ -lOpenCL
 
 INCLUDE = -I../..
 
+CFLAGS = -std=c++11
+
 COMMON_SRCS := $(wildcard oclDCT8x8_gold.cpp ../../common/src/*.cpp)
 
 # Targets
 .PHONY: cpu gpu fpga clean all
 
 cpu:
-	$(CXX) $(MYOPENCL_HOST_CODE_FILE_NAME).cpp oclDCT8x8_gold.cpp $(INCLUDE) $(CL_INCLUDE) $(CL_LIBS) -o $(TARGET)
+	$(CXX) $(CFLAGS) $(MYOPENCL_HOST_CODE_FILE_NAME).cpp oclDCT8x8_gold.cpp $(INCLUDE) $(CL_INCLUDE) $(CL_LIBS) -o $(TARGET)
 
 gpu: cpu
 all: cpu
 
 fpga:
-	$(CXX) $(MYOPENCL_HOST_CODE_FILE_NAME).cpp $(COMMON_SRCS) $(INCLUDE) $(AOCL_INCLUDE) $(AOCL_LIBS) -o $(TARGET) -DVERBOSE=$(VERBOSE_LEVEL)
+	$(CXX) $(CFLAGS) $(MYOPENCL_HOST_CODE_FILE_NAME).cpp $(COMMON_SRCS) $(INCLUDE) $(AOCL_INCLUDE) $(AOCL_LIBS) -o $(TARGET) -DVERBOSE=$(VERBOSE_LEVEL)
 
 
 clean:

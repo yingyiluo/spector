@@ -44,6 +44,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <iostream>
+#include <chrono>
 
 #include "common/include/opencl_utils.h"
 
@@ -104,7 +105,7 @@ int DCT8x8_CL_LAUNCHER(
 	cl_program program             = clContext.program;
 	cl_kernel dct_kernel           = clContext.kernels[0];
 
-        print_monitor(stdout);        
+        //print_monitor(stdout);        
 
 
 	//allocate argument arrays for the kernel
@@ -196,7 +197,7 @@ int DCT8x8_CL_LAUNCHER(
 		printf("Write src_dev buffer failed:%d\n",error);
 		return 1;
 	}
-	monitor_and_finish(command_queue, event, stdout);
+	// monitor_and_finish(command_queue, event, stdout);
 	
 	GET_TIME_INIT(2);
 	GET_TIME_VAL(0);
@@ -232,6 +233,8 @@ int DCT8x8_CL_LAUNCHER(
 #endif
 
 	double total_time = 0.0;
+	auto startInterval = chrono::high_resolution_clock::now();
+	auto endInterval = startInterval;
 	for (int iter=0; iter<num_runs; iter++)
 	{
 
@@ -247,8 +250,13 @@ int DCT8x8_CL_LAUNCHER(
 			printf("Execute task kernel failed:%d\n",error);
 			return 1;
 		}
-       
-		monitor_and_finish(command_queue, event, stdout);
+
+      		endInterval = chrono::high_resolution_clock::now();
+		if (chrono::duration <double, milli> (endInterval - startInterval).count() >= 1000)
+                {
+                	monitor_and_finish(command_queue, clContext.events[0], stdout);
+                     	startInterval = chrono::high_resolution_clock::now();
+                } 
 		clFinish(command_queue);
 		GET_TIME_VAL(1);
 		total_time = ELAPSED_TIME_MS(1, 0);
