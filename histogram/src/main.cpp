@@ -405,7 +405,7 @@ int main(int argc, char **argv)
 				kernel_times[i] += time;
 
 			}
-			total_time = chrono::duration <double, milli> (endTime - startTime).count();
+			total_time += chrono::duration <double, milli> (endTime - startTime).count();
 			if(total_time >= 600*1000)
 			{ 
 				num_runs = n + 1;
