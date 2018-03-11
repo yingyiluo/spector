@@ -371,7 +371,7 @@ int main(int argc, char **argv)
 
 	// Dry run
 	
-	auto startTime = chrono::high_resolution_clock::now();
+	//auto startTime = chrono::high_resolution_clock::now();
 	
 	histogram_cl(clContext, inputData, histogram, 1);
 
@@ -389,7 +389,7 @@ int main(int argc, char **argv)
 		}
 		histogram_cl(clContext, inputData, histogram, ifRecord);
 
-		auto endTime = chrono::high_resolution_clock::now();
+		//auto endTime = chrono::high_resolution_clock::now();
 		
 			// Get kernel execution times
 
@@ -403,9 +403,9 @@ int main(int argc, char **argv)
 				double time = (time_end - time_start) / 1000000.0;
 
 				kernel_times[i] += time;
-
+				total_time += time;
 			}
-			total_time += chrono::duration <double, milli> (endTime - startTime).count();
+			//total_time = chrono::duration <double, milli> (endTime - startTime).count();
 			if(total_time >= 600*1000)
 			{ 
 				num_runs = n + 1;
