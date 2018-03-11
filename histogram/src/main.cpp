@@ -419,7 +419,7 @@ int main(int argc, char **argv)
 		kernel_times[i] /= num_runs;
 		cout << "Kernel " << i << ": " << kernel_times[i] << " ms" << endl;
 	}
-
+	printf("\nActual number of runs: %d\n", num_runs);
 	printf("\nTotal time: %0.3f ms\n", total_time);	
 
 
