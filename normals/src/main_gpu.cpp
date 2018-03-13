@@ -53,7 +53,6 @@
 
 #include "compute_normals.h"
 #include "knobs.h"
-#include "common/include/opencl_utils.h"
 
 using namespace std;
 
@@ -345,14 +344,14 @@ int main(int argc, char ** argv)
 	}
 
 	if(!init_opencl(&clContext, device_type)){ exit(EXIT_FAILURE); }
-	print_monitor(stdout);
+
 
 	cl_context context             = clContext.context;
 	cl_command_queue command_queue = clContext.queues[0];
 	cl_kernel* kernel              = clContext.kernels.data();
 	cl_device_id device_id         = clContext.device;
 
-	
+
 	
 	int num_runs = 1;
 	if(argc >= 3)
@@ -443,8 +442,7 @@ int main(int argc, char ** argv)
 	cl_ulong k_time_start, k_time_end;
 	double k_temp, k_total_time = 0.0;
 
-	auto startInterval = chrono::high_resolution_clock::now();
-        auto endInterval = chrono::high_resolution_clock::now();
+
 	for(int irun = 0; irun < num_runs+1; irun++)
 	{
 		// --- irun == 0: dry run
@@ -466,13 +464,6 @@ int main(int argc, char ** argv)
 			cl_int err = clEnqueueNDRangeKernel(
 					command_queue, kernel[0], 1, NULL,
 					workSize, localWorkSize, 0, NULL, &clContext.events[0]);
-			endInterval = chrono::high_resolution_clock::now();
-                        if (chrono::duration <double, milli> (endInterval - startInterval).count() >= 1000)
-                        {
-                                monitor_and_finish(command_queue, clContext.events[0], stdout);
-                                startInterval = chrono::high_resolution_clock::now();
-                        }
-
 			clFinish(command_queue);
 			
 			ExitError(checkErr(err, "Failed to execute kernel!"));

@@ -38,9 +38,11 @@ TARGET := comp_normals
 
 CC = g++
 
-AOCL_INCLUDE = $(shell aocl compile-config)
-AOCL_LIBS    = $(shell aocl link-config) -lnalla_pice_mmd
+AOCL_INCLUDE = $(shell aocl compile-config) -I$(ALTERAOCLSDKROOT)/board/nalla_pcie/software/include
+AOCL_LIBS    = $(shell aocl link-config) -lhook -lnalla_pcie_mmd
 #AOCL_LIBS    = $(shell aocl link-config | sed 's/lterasic/laltera/g')
+COMMON_INCLUDE = -I$(HOME)/spector/ 
+COMMON_CFILE = $(HOME)/spector/common/src/monitor.cpp
 
 CL_DIR       = /home/yingyi/AMDAPPSDK-3.0
 CL_INCLUDE   = -I$(CL_DIR)/include/
@@ -53,13 +55,13 @@ CFLAGS = -std=c++11
 .PHONY: cpu gpu fpga clean
 
 cpu:
-	$(CC) main.cpp $(CFLAGS) $(CL_INCLUDE) $(CL_LIBS) -o $(TARGET)
+	$(CC) main_gpu.cpp $(CFLAGS) $(CL_INCLUDE) $(CL_LIBS) -o $(TARGET)
 
 gpu: cpu
 all: cpu
 
 fpga:
-	$(CC) main.cpp $(CFLAGS) $(AOCL_INCLUDE) $(AOCL_LIBS) -o $(TARGET)
+	$(CC) main.cpp $(COMMON_CFILE) $(CFLAGS) $(COMMON_INCLUDE) $(AOCL_INCLUDE) $(AOCL_LIBS) -o $(TARGET)
 
 clean:
 	rm -rf $(TARGET)
